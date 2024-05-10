@@ -3,16 +3,22 @@ package com.awkrid.todo.domain.comment.controller
 import com.awkrid.todo.domain.comment.dto.AddCommentRequest
 import com.awkrid.todo.domain.comment.dto.CommentResponse
 import com.awkrid.todo.domain.comment.dto.UpdateCommentRequest
+import com.awkrid.todo.domain.todo.service.TodoService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/todos/{todoId}/comments")
 @RestController
-class CommentController {
+class CommentController(
+    private val todoService: TodoService
+) {
 
     @GetMapping
     fun getCommentList(@PathVariable("todoId") todoId: Long): ResponseEntity<List<CommentResponse>> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todoService.getCommentList(todoId))
     }
 
     @GetMapping("/{commentId}")
@@ -20,7 +26,9 @@ class CommentController {
         @PathVariable("todoId") todoId: Long,
         @PathVariable("commentId") commentId: Long
     ): ResponseEntity<CommentResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todoService.getCommentById(todoId, commentId))
     }
 
     @PostMapping
@@ -28,7 +36,9 @@ class CommentController {
         @PathVariable("todoId") todoId: Long,
         @RequestBody addCommentRequest: AddCommentRequest
     ): ResponseEntity<CommentResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(todoService.addComment(todoId, addCommentRequest))
     }
 
     @PutMapping("/{commentId}")
@@ -37,7 +47,9 @@ class CommentController {
         @PathVariable("commentId") commentId: Long,
         @RequestBody updateCommentRequest: UpdateCommentRequest,
     ): ResponseEntity<CommentResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todoService.updateComment(todoId, commentId, updateCommentRequest))
     }
 
     @DeleteMapping("/{commentId}")
@@ -45,7 +57,10 @@ class CommentController {
         @PathVariable("todoId") todoId: Long,
         @PathVariable("commentId") commentId: Long
     ): ResponseEntity<Unit> {
-        TODO()
+        todoService.deleteComment(todoId, commentId)
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build()
     }
 
 }
