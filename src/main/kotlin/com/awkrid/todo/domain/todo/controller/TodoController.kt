@@ -21,7 +21,7 @@ class TodoController(
             .body(todoService.getTodoById(todoId))
     }
 
-    @GetMapping()
+    @GetMapping
     fun getTodoList(): ResponseEntity<List<TodoResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -42,7 +42,7 @@ class TodoController(
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.updateTodo(updateTodoRequest))
+            .body(todoService.updateTodo(todoId, updateTodoRequest))
     }
 
     @DeleteMapping("/{todoId}")
@@ -52,6 +52,5 @@ class TodoController(
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
-
 
 }

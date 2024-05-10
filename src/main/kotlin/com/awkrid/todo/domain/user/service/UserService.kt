@@ -4,5 +4,5 @@ import com.awkrid.todo.domain.user.dto.SignUpRequest
 import com.awkrid.todo.domain.user.dto.UserResponse
 
 interface UserService {
-    fun signUp(signUpRequest: SignUpRequest): UserResponse
+    fun signUp(request: SignUpRequest): UserResponse
 }
