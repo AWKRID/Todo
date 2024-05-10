@@ -50,6 +50,7 @@ class TodoServiceImpl(
         val (title, description) = request
         todo.title = title
         todo.description = description
+        if(request.isDone) todo.done()
         return todoRepository.save(todo).toResponse()
     }
 

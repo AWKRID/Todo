@@ -20,6 +20,9 @@ class Todo(
     @Column(name = "date")
     val date: LocalDateTime = LocalDateTime.now(),
 
+    @Column(name = "is_done")
+    var isDone: Boolean = false,
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     val user: User,
@@ -39,6 +42,10 @@ class Todo(
     fun removeComment(comment: Comment) {
         comments.remove(comment)
     }
+
+    fun done(){
+        isDone = true
+    }
 }
 
 fun Todo.toResponse(): TodoResponse {
@@ -47,7 +54,8 @@ fun Todo.toResponse(): TodoResponse {
         title = title,
         description = description,
         date = date,
-        user = user.toResponse()
+        user = user.toResponse(),
+        isDone = isDone
 
     )
 }

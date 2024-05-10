@@ -9,4 +9,5 @@ data class TodoResponse(
     val description: String?,
     val date: LocalDateTime,
     val user: UserResponse,
+    val isDone: Boolean
 )
