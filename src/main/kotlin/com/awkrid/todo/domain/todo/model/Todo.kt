@@ -27,7 +27,7 @@ class Todo(
     @JoinColumn(name = "user_id")
     val user: User,
 
-    @OneToMany(mappedBy = "todo", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "todo")
     val comments: MutableList<Comment> = mutableListOf(),
 
     ) {
@@ -56,6 +56,5 @@ fun Todo.toResponse(): TodoResponse {
         date = date,
         user = user.toResponse(),
         isDone = isDone
-
     )
 }

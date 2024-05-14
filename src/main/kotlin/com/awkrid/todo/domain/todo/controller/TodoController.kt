@@ -4,6 +4,9 @@ import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
 import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.todo.service.TodoService
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -22,10 +25,14 @@ class TodoController(
     }
 
     @GetMapping
-    fun getTodoList(): ResponseEntity<List<TodoResponse>> {
+    fun getTodoList(
+        @PageableDefault(size = 10, sort = ["date"], direction = Sort.Direction.DESC) pageable: Pageable,
+
+    ): ResponseEntity<List<TodoResponse>> {
+        pageable.sort
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.getAllTodoList())
+            .body(todoService.getAllTodoList(pageable))
     }
 
     @PostMapping

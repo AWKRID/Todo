@@ -15,6 +15,10 @@ import com.awkrid.todo.domain.todo.model.toResponse
 import com.awkrid.todo.domain.todo.repository.TodoRepository
 import com.awkrid.todo.domain.user.repository.UserRepository
 import jakarta.transaction.Transactional
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -24,8 +28,9 @@ class TodoServiceImpl(
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
 ) : TodoService {
-    override fun getAllTodoList(): List<TodoResponse> {
-        return todoRepository.findAll().map{it.toResponse()}
+    override fun getAllTodoList(pageable: Pageable): List<TodoResponse> {
+        val pageTodo: Page<Todo> = todoRepository.findAll(pageable)
+        return pageTodo.content.map { it.toResponse()}
     }
 
     override fun getTodoById(todoId: Long): TodoResponse {
