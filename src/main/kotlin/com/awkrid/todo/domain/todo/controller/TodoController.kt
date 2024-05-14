@@ -27,12 +27,12 @@ class TodoController(
     @GetMapping
     fun getTodoList(
         @PageableDefault(size = 10, sort = ["date"], direction = Sort.Direction.DESC) pageable: Pageable,
-
+        @RequestParam(value = "name", required = false) name: String?,
     ): ResponseEntity<List<TodoResponse>> {
         pageable.sort
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.getAllTodoList(pageable))
+            .body(todoService.getAllTodoList(name, pageable))
     }
 
     @PostMapping

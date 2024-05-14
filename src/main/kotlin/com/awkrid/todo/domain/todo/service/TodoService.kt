@@ -9,7 +9,7 @@ import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import org.springframework.data.domain.Pageable
 
 interface TodoService {
-    fun getAllTodoList(pageable: Pageable): List<TodoResponse>
+    fun getAllTodoList(name: String?, pageable: Pageable): List<TodoResponse>
 
     fun getTodoById(todoId: Long): TodoResponse
 

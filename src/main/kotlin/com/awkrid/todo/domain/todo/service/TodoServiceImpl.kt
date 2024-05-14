@@ -16,9 +16,7 @@ import com.awkrid.todo.domain.todo.repository.TodoRepository
 import com.awkrid.todo.domain.user.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -28,8 +26,9 @@ class TodoServiceImpl(
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
 ) : TodoService {
-    override fun getAllTodoList(pageable: Pageable): List<TodoResponse> {
-        val pageTodo: Page<Todo> = todoRepository.findAll(pageable)
+    override fun getAllTodoList(name: String?, pageable: Pageable): List<TodoResponse> {
+        val pageTodo: Page<Todo> = if(name.isNullOrBlank()) todoRepository.findAll(pageable)
+        else todoRepository.findByName(name, pageable)
         return pageTodo.content.map { it.toResponse()}
     }
 
