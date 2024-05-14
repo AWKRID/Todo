@@ -3,6 +3,7 @@ package com.awkrid.todo.domain.exception
 import com.awkrid.todo.domain.exception.dto.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
@@ -16,5 +17,9 @@ class GlobalExceptionHandler {
     @ExceptionHandler(IllegalStateException::class)
     fun handlerIllegalStateException(e: IllegalStateException): ResponseEntity<ErrorResponse> {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse(e.message))
+    }
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handlerRequestBodyNotValid(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse(e.fieldError?.defaultMessage))
     }
 }

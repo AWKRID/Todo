@@ -4,6 +4,7 @@ import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
 import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.todo.service.TodoService
+import jakarta.validation.Valid
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -36,7 +37,7 @@ class TodoController(
     }
 
     @PostMapping
-    fun createTodo(@RequestBody createTodoRequest: CreateTodoRequest): ResponseEntity<TodoResponse> {
+    fun createTodo(@Valid @RequestBody createTodoRequest: CreateTodoRequest): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(todoService.createTodo(createTodoRequest))
@@ -45,7 +46,7 @@ class TodoController(
     @PutMapping("/{todoId}")
     fun updateTodo(
         @PathVariable todoId: Long,
-        @RequestBody updateTodoRequest: UpdateTodoRequest
+        @Valid @RequestBody updateTodoRequest: UpdateTodoRequest
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
