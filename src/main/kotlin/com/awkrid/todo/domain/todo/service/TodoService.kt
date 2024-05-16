@@ -6,10 +6,11 @@ import com.awkrid.todo.domain.comment.dto.UpdateCommentRequest
 import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
 import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface TodoService {
-    fun getAllTodoList(name: String?, pageable: Pageable): List<TodoResponse>
+    fun getAllTodoList(name: String?, pageable: Pageable): Page<TodoResponse>
 
     fun getTodoById(todoId: Long): TodoResponse
 

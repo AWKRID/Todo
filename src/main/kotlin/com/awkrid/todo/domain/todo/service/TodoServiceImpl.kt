@@ -26,10 +26,11 @@ class TodoServiceImpl(
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
 ) : TodoService {
-    override fun getAllTodoList(name: String?, pageable: Pageable): List<TodoResponse> {
+    override fun getAllTodoList(name: String?, pageable: Pageable): Page<TodoResponse> {
         val pageTodo: Page<Todo> = if(name.isNullOrBlank()) todoRepository.findAll(pageable)
         else todoRepository.findByName(name, pageable)
-        return pageTodo.content.map { it.toResponse()}
+        return pageTodo.map{it.toResponse()}
+
     }
 
     override fun getTodoById(todoId: Long): TodoResponse {

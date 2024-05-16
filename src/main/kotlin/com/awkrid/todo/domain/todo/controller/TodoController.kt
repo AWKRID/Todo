@@ -5,6 +5,7 @@ import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.todo.service.TodoService
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -29,7 +30,7 @@ class TodoController(
     fun getTodoList(
         @PageableDefault(size = 10, sort = ["date"], direction = Sort.Direction.DESC) pageable: Pageable,
         @RequestParam(value = "name", required = false) name: String?,
-    ): ResponseEntity<List<TodoResponse>> {
+    ): ResponseEntity<Page<TodoResponse>> {
         pageable.sort
         return ResponseEntity
             .status(HttpStatus.OK)

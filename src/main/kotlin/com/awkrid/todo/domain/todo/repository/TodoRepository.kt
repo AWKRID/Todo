@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param
 
 interface TodoRepository : JpaRepository<Todo, Long> {
     override fun findAll(pageable: Pageable): Page<Todo>
+
+
     @Query("select t from Todo t join t.user u where u.name like concat('%',:name,'%')")
     fun findByName(@Param("name") name: String, pageable: Pageable): Page<Todo>
 

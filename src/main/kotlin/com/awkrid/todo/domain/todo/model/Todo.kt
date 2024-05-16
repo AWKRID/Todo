@@ -1,6 +1,7 @@
 package com.awkrid.todo.domain.todo.model
 
 import com.awkrid.todo.domain.comment.model.Comment
+import com.awkrid.todo.domain.comment.model.toResponse
 import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.user.model.User
 import com.awkrid.todo.domain.user.model.toResponse
@@ -23,7 +24,7 @@ class Todo(
     @Column(name = "is_done")
     var isDone: Boolean = false,
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     val user: User,
 
@@ -54,6 +55,7 @@ fun Todo.toResponse(): TodoResponse {
         title = title,
         description = description,
         date = date,
+        comments = comments.map{it.toResponse()},
         user = user.toResponse(),
         isDone = isDone
     )
