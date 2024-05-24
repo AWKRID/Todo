@@ -8,11 +8,19 @@
 
 ## 프로젝트 설계
 ### 1. Event Stroming
+---
+
 DDD 설계 방식을 통해 아래와 같이 Design 하였습니다.
 ![Event storming_page-0001](https://github.com/AWKRID/Todo/assets/137989290/34c09760-fb3e-4287-91b5-7386e862bd1a)
 
 ### 2. ERD
+---
 
+본 프로젝트에 사용된 테이블은 총 세 개로 다음과 같이 관계를 가지고 있습니다.
 ![image](https://github.com/AWKRID/Todo/assets/137989290/a47d4741-ef0f-4ed1-8c7d-196a16c2a3f9)
 
+### API 명세서
+---
 
+본 프로젝트의 API 명세서는 아래 사이트에 정리해두었습니다.
+[API 명세서 확인하기](https://leather-antimony-86c.notion.site/Todo-API-4cdba9cd234143569797d2c34137f009)
