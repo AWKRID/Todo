@@ -11,6 +11,10 @@ class User(
 
     @Column(name = "password")
     var password: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    val role: UserRole
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +26,6 @@ fun User.toResponse(): UserResponse {
     return UserResponse(
         id = id!!,
         name = name,
+        role = role.name,
     )
 }

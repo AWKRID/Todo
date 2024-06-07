@@ -1,5 +1,7 @@
 package com.awkrid.todo.domain.user.controller
 
+import com.awkrid.todo.domain.user.dto.LoginRequest
+import com.awkrid.todo.domain.user.dto.LoginResponse
 import com.awkrid.todo.domain.user.dto.SignUpRequest
 import com.awkrid.todo.domain.user.dto.UserResponse
 import com.awkrid.todo.domain.user.service.UserService
@@ -18,5 +20,12 @@ class UserController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(userService.signUp(signUpRequest))
+    }
+
+    @PostMapping("/login")
+    fun signIn(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userService.login(loginRequest))
     }
 }

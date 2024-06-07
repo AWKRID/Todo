@@ -23,7 +23,6 @@ class TodoServiceImpl(
         val pageTodo: Page<Todo> = if (name.isNullOrBlank()) todoRepository.findAll(pageable)
         else todoRepository.findByName(name, pageable)
         return pageTodo.map { it.toResponse() }
-
     }
 
     override fun getTodoById(todoId: Long): TodoResponse {

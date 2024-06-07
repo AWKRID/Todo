@@ -17,29 +17,28 @@ import org.springframework.stereotype.Service
 class CommentService(
     val todoRepository: TodoRepository,
     val commentRepository: CommentRepository,
-    val userRepository: UserRepository,
+    val userRepository: UserRepository
 ) {
 
     fun getCommentList(todoId: Long): List<CommentResponse> {
-        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        return todo.comments.map { it.toResponse() }
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo",todoId)
+        return todo.comments.map{it.toResponse()}
     }
 
     fun getCommentById(todoId: Long, commentId: Long): CommentResponse {
-        val comment =
-            commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
+        val comment = commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment",commentId)
         return comment.toResponse()
     }
 
     @Transactional
     fun addComment(todoId: Long, request: AddCommentRequest): CommentResponse {
-        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        val user = userRepository.findByIdOrNull(request.userId) ?: throw ModelNotFoundException("User", request.userId)
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo",todoId)
+        val user = userRepository.findByIdOrNull(request.userId) ?: throw ModelNotFoundException("User",request.userId)
         val comment = Comment(
             user = user,
             text = request.text,
             todo = todo,
-        ).let { commentRepository.save(it) }
+        ).let{commentRepository.save(it)}
 
         todo.addComment(comment)
         return comment.toResponse()
@@ -47,17 +46,15 @@ class CommentService(
 
     @Transactional
     fun updateComment(todoId: Long, commentId: Long, request: UpdateCommentRequest): CommentResponse {
-        val comment =
-            commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
+        val comment = commentRepository.findByTodoIdAndId(todoId,commentId) ?: throw ModelNotFoundException("Comment",commentId)
         comment.text = request.text
         return commentRepository.save(comment).toResponse()
     }
 
     @Transactional
     fun deleteComment(todoId: Long, commentId: Long) {
-        val comment =
-            commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+        val comment = commentRepository.findByTodoIdAndId(todoId,commentId) ?: throw ModelNotFoundException("Comment",commentId)
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo",todoId)
         todo.removeComment(comment)
         commentRepository.delete(comment)
     }

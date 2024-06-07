@@ -1,6 +1,7 @@
 package com.awkrid.todo.domain.user.dto
 
-data class SignUpRequest(
+data class LoginRequest(
     val name: String,
     val password: String,
+    val role: String,
 )
