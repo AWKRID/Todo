@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/todos")
@@ -38,25 +39,32 @@ class TodoController(
     }
 
     @PostMapping
-    fun createTodo(@Valid @RequestBody createTodoRequest: CreateTodoRequest): ResponseEntity<TodoResponse> {
+    fun createTodo(
+        @Valid @RequestBody createTodoRequest: CreateTodoRequest,
+        authentication: Authentication
+    ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(todoService.createTodo(createTodoRequest))
+            .body(todoService.createTodo(createTodoRequest, authentication))
     }
 
     @PutMapping("/{todoId}")
     fun updateTodo(
         @PathVariable todoId: Long,
-        @Valid @RequestBody updateTodoRequest: UpdateTodoRequest
+        @Valid @RequestBody updateTodoRequest: UpdateTodoRequest,
+        authentication: Authentication,
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.updateTodo(todoId, updateTodoRequest))
+            .body(todoService.updateTodo(todoId, updateTodoRequest, authentication))
     }
 
     @DeleteMapping("/{todoId}")
-    fun deleteTodo(@PathVariable todoId: Long): ResponseEntity<Unit> {
-        todoService.deleteTodo(todoId)
+    fun deleteTodo(
+        @PathVariable todoId: Long,
+        authentication: Authentication,
+    ): ResponseEntity<Unit> {
+        todoService.deleteTodo(todoId, authentication)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()

@@ -6,6 +6,7 @@ import com.awkrid.todo.domain.comment.dto.UpdateCommentRequest
 import com.awkrid.todo.domain.comment.service.CommentService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/todos/{todoId}/comments")
@@ -34,11 +35,12 @@ class CommentController(
     @PostMapping
     fun addComment(
         @PathVariable("todoId") todoId: Long,
-        @RequestBody addCommentRequest: AddCommentRequest
+        @RequestBody addCommentRequest: AddCommentRequest,
+        authentication: Authentication
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(commentService.addComment(todoId, addCommentRequest))
+            .body(commentService.addComment(todoId, addCommentRequest, authentication))
     }
 
     @PutMapping("/{commentId}")
@@ -46,18 +48,20 @@ class CommentController(
         @PathVariable("todoId") todoId: Long,
         @PathVariable("commentId") commentId: Long,
         @RequestBody updateCommentRequest: UpdateCommentRequest,
+        authentication: Authentication
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(commentService.updateComment(todoId, commentId, updateCommentRequest))
+            .body(commentService.updateComment(todoId, commentId, updateCommentRequest, authentication))
     }
 
     @DeleteMapping("/{commentId}")
     fun deleteComment(
         @PathVariable("todoId") todoId: Long,
-        @PathVariable("commentId") commentId: Long
+        @PathVariable("commentId") commentId: Long,
+        authentication: Authentication
     ): ResponseEntity<Unit> {
-        commentService.deleteComment(todoId, commentId)
+        commentService.deleteComment(todoId, commentId, authentication)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
