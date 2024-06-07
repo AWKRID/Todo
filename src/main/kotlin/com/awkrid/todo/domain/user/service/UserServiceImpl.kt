@@ -1,6 +1,7 @@
 package com.awkrid.todo.domain.user.service
 
 import com.awkrid.todo.domain.exception.ModelNotFoundException
+import com.awkrid.todo.domain.oauth2.client.oauth2.OAuth2LoginUserInfo
 import com.awkrid.todo.domain.user.dto.LoginRequest
 import com.awkrid.todo.domain.user.dto.LoginResponse
 import com.awkrid.todo.domain.user.dto.SignUpRequest
@@ -21,7 +22,7 @@ class UserServiceImpl(
     private val jwtHelper: jwtHelper
 ) : UserService {
     override fun signUp(request: SignUpRequest): UserResponse {
-        if(userRepository.existsByName(request.name)){
+        if (userRepository.existsByName(request.name)) {
             throw IllegalStateException("Username already taken")
         }
         return userRepository.save(
@@ -34,8 +35,8 @@ class UserServiceImpl(
     }
 
     override fun login(request: LoginRequest): LoginResponse {
-        val user = userRepository.findByName(request.name) ?: throw ModelNotFoundException("User",null)
-        if(user.role.name != request.role || !passwordEncoder.matches(request.password, user.password)){
+        val user = userRepository.findByName(request.name) ?: throw ModelNotFoundException("User", null)
+        if (user.role.name != request.role || !passwordEncoder.matches(request.password, user.password)) {
             throw InvalidCredentialException()
         }
         return LoginResponse(
@@ -46,5 +47,18 @@ class UserServiceImpl(
             )
         )
 
+    }
+
+    override fun registerIfAbsent(userInfo: OAuth2LoginUserInfo): UserResponse {
+        val user = userRepository.findByProviderAndProviderId(userInfo.provider, userInfo.id) ?: run {
+            val user = User(
+                name = userInfo.name,
+                role = UserRole.USER,
+                provider = userInfo.provider,
+                providerId = userInfo.id
+            )
+            userRepository.save(user)
+        }
+        return user.toResponse()
     }
 }

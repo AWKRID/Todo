@@ -25,7 +25,8 @@ class SecurityConfig(
                     "/login",
                     "/signup",
                     "/swagger-ui/**",
-                    "/v3/api-docs/**"
+                    "/v3/api-docs/**",
+                    "/oauth2/**"
                 )
                     .permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")

@@ -1,5 +1,6 @@
 package com.awkrid.todo.domain.user.model
 
+import com.awkrid.todo.domain.oauth2.OAuth2Provider
 import com.awkrid.todo.domain.user.dto.UserResponse
 import jakarta.persistence.*
 
@@ -9,8 +10,15 @@ class User(
     @Column(name = "name")
     var name: String,
 
-    @Column(name = "password")
-    var password: String,
+    @Column(name = "password", nullable = true)
+    var password: String? = null,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider", nullable = true)
+    var provider: OAuth2Provider? = null,
+
+    @Column(name = "provider_id", nullable = true)
+    var providerId: String? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
