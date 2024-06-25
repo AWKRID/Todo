@@ -4,7 +4,6 @@ import com.awkrid.todo.domain.comment.dto.AddCommentRequest
 import com.awkrid.todo.domain.comment.dto.CommentResponse
 import com.awkrid.todo.domain.comment.dto.UpdateCommentRequest
 import com.awkrid.todo.domain.comment.model.Comment
-import com.awkrid.todo.domain.comment.model.toResponse
 import com.awkrid.todo.domain.comment.repository.CommentRepository
 import com.awkrid.todo.domain.exception.ModelNotFoundException
 import com.awkrid.todo.domain.todo.repository.TodoRepository
@@ -25,13 +24,13 @@ class CommentService(
 
     fun getCommentList(todoId: Long): List<CommentResponse> {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        return todo.comments.map { it.toResponse() }
+        return todo.comments.map { CommentResponse.from(it) }
     }
 
     fun getCommentById(todoId: Long, commentId: Long): CommentResponse {
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        return comment.toResponse()
+        return CommentResponse.from(comment)
     }
 
     @Transactional
@@ -47,7 +46,7 @@ class CommentService(
         ).let { commentRepository.save(it) }
 
         todo.addComment(comment)
-        return comment.toResponse()
+        return CommentResponse.from(comment)
     }
 
     @Transactional
@@ -64,7 +63,8 @@ class CommentService(
             throw InvalidCredentialException()
         }
         comment.text = request.text
-        return commentRepository.save(comment).toResponse()
+        return commentRepository.save(comment)
+            .let { CommentResponse.from(it) }
     }
 
     @Transactional

@@ -1,7 +1,6 @@
 package com.awkrid.todo.domain.user.model
 
 import com.awkrid.todo.domain.oauth2.OAuth2Provider
-import com.awkrid.todo.domain.user.dto.UserResponse
 import jakarta.persistence.*
 
 @Entity
@@ -28,12 +27,4 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
-}
-
-fun User.toResponse(): UserResponse {
-    return UserResponse(
-        id = id!!,
-        name = name,
-        role = role.name,
-    )
 }

@@ -5,7 +5,6 @@ import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
 import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.todo.model.Todo
-import com.awkrid.todo.domain.todo.model.toResponse
 import com.awkrid.todo.domain.todo.repository.TodoRepository
 import com.awkrid.todo.domain.user.exception.InvalidCredentialException
 import com.awkrid.todo.domain.user.repository.UserRepository
@@ -25,12 +24,13 @@ class TodoServiceImpl(
     override fun getAllTodoList(name: String?, pageable: Pageable): Page<TodoResponse> {
         val pageTodo: Page<Todo> = if (name.isNullOrBlank()) todoRepository.findAll(pageable)
         else todoRepository.findByName(name, pageable)
-        return pageTodo.map { it.toResponse() }
+        return pageTodo.map { TodoResponse.from(it) }
+
     }
 
     override fun getTodoById(todoId: Long): TodoResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        return todo.toResponse()
+        return TodoResponse.from(todo)
     }
 
     @Transactional
@@ -43,7 +43,9 @@ class TodoServiceImpl(
             description = request.description,
             user = user
         )
-        return todoRepository.save(todo).toResponse()
+        return todoRepository.save(todo).let {
+            TodoResponse.from(it)
+        }
     }
 
     @Transactional
@@ -54,7 +56,9 @@ class TodoServiceImpl(
             throw InvalidCredentialException()
         }
         todo.updateTodo(request)
-        return todoRepository.save(todo).toResponse()
+        return todoRepository.save(todo).let {
+            TodoResponse.from(it)
+        }
     }
 
     @Transactional

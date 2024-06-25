@@ -1,11 +1,8 @@
 package com.awkrid.todo.domain.todo.model
 
 import com.awkrid.todo.domain.comment.model.Comment
-import com.awkrid.todo.domain.comment.model.toResponse
-import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.user.model.User
-import com.awkrid.todo.domain.user.model.toResponse
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -45,21 +42,9 @@ class Todo(
         comments.remove(comment)
     }
 
-    fun updateTodo(request: UpdateTodoRequest){
-        if(request.isDone) isDone = true
+    fun updateTodo(request: UpdateTodoRequest) {
+        if (request.isDone) isDone = true
         title = request.title
         description = request.description
     }
-}
-
-fun Todo.toResponse(): TodoResponse {
-    return TodoResponse(
-        id = id!!,
-        title = title,
-        description = description,
-        date = date,
-        comments = comments.map{it.toResponse()},
-        user = user.toResponse(),
-        isDone = isDone
-    )
 }

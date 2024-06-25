@@ -9,7 +9,6 @@ import com.awkrid.todo.domain.user.dto.UserResponse
 import com.awkrid.todo.domain.user.exception.InvalidCredentialException
 import com.awkrid.todo.domain.user.model.User
 import com.awkrid.todo.domain.user.model.UserRole
-import com.awkrid.todo.domain.user.model.toResponse
 import com.awkrid.todo.domain.user.repository.UserRepository
 import com.awkrid.todo.infra.swagger.security.jwt.jwtHelper
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -22,16 +21,15 @@ class UserServiceImpl(
     private val jwtHelper: jwtHelper
 ) : UserService {
     override fun signUp(request: SignUpRequest): UserResponse {
-        if (userRepository.existsByName(request.name)) {
-            throw IllegalStateException("Username already taken")
-        }
-        return userRepository.save(
-            User(
-                name = request.name,
-                password = passwordEncoder.encode(request.password),
-                role = UserRole.USER
-            )
-        ).toResponse()
+        if (userRepository.existsByName(request.name)) throw IllegalStateException("Username already taken")
+
+        return User(
+            name = request.name,
+            password = passwordEncoder.encode(request.password),
+            role = UserRole.USER
+        )
+            .let { userRepository.save(it) }
+            .let { UserResponse.from(it) }
     }
 
     override fun login(request: LoginRequest): LoginResponse {
@@ -59,6 +57,6 @@ class UserServiceImpl(
             )
             userRepository.save(user)
         }
-        return user.toResponse()
+        return UserResponse.from(user)
     }
 }
