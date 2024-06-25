@@ -6,7 +6,6 @@ import com.awkrid.todo.infra.swagger.security.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,7 +27,7 @@ class TodoController(
 
     @GetMapping
     fun getTodoList(
-        @PageableDefault(size = 10, sort = ["date"], direction = Sort.Direction.DESC) pageable: Pageable,
+        @PageableDefault(size = 10, sort = ["date"]) pageable: Pageable,
         filter: TodoFilter
     ): ResponseEntity<Page<TodoResponse>> {
         pageable.sort

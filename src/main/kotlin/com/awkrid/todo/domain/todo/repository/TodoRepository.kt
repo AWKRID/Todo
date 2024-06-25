@@ -58,6 +58,14 @@ class TodoQueryDslRepositoryImpl(
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
 
+        if (pageable.sort.isSorted) {
+            when (pageable.sort.first()?.property) {
+                "title" -> query.orderBy(todo.title.asc())
+                "id" -> query.orderBy(todo.id.asc())
+                "date" -> query.orderBy(todo.date.desc())
+                else -> query.orderBy(todo.date.desc())
+            }
+        }
         val contents = query.fetch()
         return PageImpl(contents, pageable, totalCount)
     }
