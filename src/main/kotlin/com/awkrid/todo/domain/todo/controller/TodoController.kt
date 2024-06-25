@@ -1,9 +1,6 @@
 package com.awkrid.todo.domain.todo.controller
 
-import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
-import com.awkrid.todo.domain.todo.dto.TodoResponse
-import com.awkrid.todo.domain.todo.dto.TodoResponseWithComments
-import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
+import com.awkrid.todo.domain.todo.dto.*
 import com.awkrid.todo.domain.todo.service.TodoService
 import com.awkrid.todo.infra.swagger.security.UserPrincipal
 import jakarta.validation.Valid
@@ -32,12 +29,12 @@ class TodoController(
     @GetMapping
     fun getTodoList(
         @PageableDefault(size = 10, sort = ["date"], direction = Sort.Direction.DESC) pageable: Pageable,
-        @RequestParam(value = "name", required = false) name: String?,
+        filter: TodoFilter
     ): ResponseEntity<Page<TodoResponse>> {
         pageable.sort
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.getAllTodoList(name, pageable))
+            .body(todoService.getAllTodoList(pageable, filter))
     }
 
     @PostMapping

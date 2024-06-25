@@ -3,10 +3,7 @@ package com.awkrid.todo.domain.todo.service
 import com.awkrid.todo.domain.category.repository.CategoryRepository
 import com.awkrid.todo.domain.comment.repository.CommentRepository
 import com.awkrid.todo.domain.exception.ModelNotFoundException
-import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
-import com.awkrid.todo.domain.todo.dto.TodoResponse
-import com.awkrid.todo.domain.todo.dto.TodoResponseWithComments
-import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
+import com.awkrid.todo.domain.todo.dto.*
 import com.awkrid.todo.domain.todo.model.Todo
 import com.awkrid.todo.domain.todo.repository.TodoRepository
 import com.awkrid.todo.domain.user.exception.InvalidCredentialException
@@ -24,11 +21,9 @@ class TodoServiceImpl(
     private val commentRepository: CommentRepository,
     private val categoryRepository: CategoryRepository,
 ) : TodoService {
-    override fun getAllTodoList(name: String?, pageable: Pageable): Page<TodoResponse> {
-        val pageTodo: Page<Todo> = if (name.isNullOrBlank()) todoRepository.findAll(pageable)
-        else todoRepository.findByName(name, pageable)
-        return pageTodo.map { TodoResponse.from(it) }
-
+    override fun getAllTodoList(pageable: Pageable, filter: TodoFilter): Page<TodoResponse> {
+        return todoRepository.findByPageableAndFilters(pageable, filter)
+            .map { TodoResponse.from(it) }
     }
 
     override fun getTodoById(todoId: Long): TodoResponseWithComments {
@@ -50,7 +45,7 @@ class TodoServiceImpl(
             description = request.description,
             user = user,
             tags = toHashTags(request.tags),
-            category = category
+            category = category.name
         )
         return todoRepository.save(todo).let {
             TodoResponse.from(it)
@@ -70,7 +65,7 @@ class TodoServiceImpl(
             this.description = request.description
             this.isDone = request.isDone
             this.tags = "#" + request.tags.joinToString("#") + "#"
-            this.category = category
+            this.category = category.name
         }
         return todoRepository.save(todo)
             .let { TodoResponse.from(it) }

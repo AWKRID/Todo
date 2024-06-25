@@ -25,7 +25,7 @@ data class TodoResponse(
                 isDone = todo.isDone,
                 user = UserResponse.from(todo.user),
                 tags = todo.tags.split("#").filter(String::isNotEmpty),
-                category = todo.category.name
+                category = todo.category
             )
         }
     }
