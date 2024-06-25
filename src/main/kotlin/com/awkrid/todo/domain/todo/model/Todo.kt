@@ -1,6 +1,5 @@
 package com.awkrid.todo.domain.todo.model
 
-import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.user.model.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -29,10 +28,4 @@ class Todo(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
-
-    fun updateTodo(request: UpdateTodoRequest) {
-        if (request.isDone) isDone = true
-        title = request.title
-        description = request.description
-    }
 }

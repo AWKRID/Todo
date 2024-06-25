@@ -56,11 +56,9 @@ class CommentService(
     ): CommentResponse {
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        if (comment.user.id != userId) {
-            throw InvalidCredentialException()
-        }
-        comment.text = request.text
-        return commentRepository.save(comment)
+        if (comment.user.id != userId) throw InvalidCredentialException()
+        return comment.apply { this.text = request.text }
+            .let { commentRepository.save(comment) }
             .let { CommentResponse.from(it) }
     }
 

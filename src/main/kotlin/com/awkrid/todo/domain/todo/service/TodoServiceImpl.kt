@@ -52,13 +52,14 @@ class TodoServiceImpl(
     @Transactional
     override fun updateTodo(todoId: Long, request: UpdateTodoRequest, userId: Long): TodoResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        if (todo.user.id != userId) {
-            throw InvalidCredentialException()
+        if (todo.user.id != userId) throw InvalidCredentialException()
+        todo.apply {
+            this.title = request.title
+            this.description = request.description
+            this.isDone = request.isDone
         }
-        todo.updateTodo(request)
-        return todoRepository.save(todo).let {
-            TodoResponse.from(it)
-        }
+        return todoRepository.save(todo)
+            .let { TodoResponse.from(it) }
     }
 
     @Transactional
