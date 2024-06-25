@@ -8,12 +8,10 @@ import com.awkrid.todo.domain.todo.model.Todo
 import com.awkrid.todo.domain.todo.repository.TodoRepository
 import com.awkrid.todo.domain.user.exception.InvalidCredentialException
 import com.awkrid.todo.domain.user.repository.UserRepository
-import com.awkrid.todo.infra.swagger.security.UserPrincipal
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
@@ -34,10 +32,9 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    override fun createTodo(request: CreateTodoRequest, authentication: Authentication): TodoResponse {
-        val userPrincipal = authentication.principal as UserPrincipal
+    override fun createTodo(request: CreateTodoRequest, userId: Long): TodoResponse {
         val user =
-            userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+            userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val todo = Todo(
             title = request.title,
             description = request.description,
@@ -49,10 +46,9 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    override fun updateTodo(todoId: Long, request: UpdateTodoRequest, authentication: Authentication): TodoResponse {
-        val userPrincipal = authentication.principal as UserPrincipal
+    override fun updateTodo(todoId: Long, request: UpdateTodoRequest, userId: Long): TodoResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        if (todo.user.id != userPrincipal.id) {
+        if (todo.user.id != userId) {
             throw InvalidCredentialException()
         }
         todo.updateTodo(request)
@@ -62,10 +58,9 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    override fun deleteTodo(todoId: Long, authentication: Authentication) {
-        val userPrincipal = authentication.principal as UserPrincipal
+    override fun deleteTodo(todoId: Long, userId: Long) {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        if (todo.user.id != userPrincipal.id) {
+        if (todo.user.id != userId) {
             throw InvalidCredentialException()
         }
         todoRepository.delete(todo)

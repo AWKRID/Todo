@@ -4,9 +4,10 @@ import com.awkrid.todo.domain.comment.dto.AddCommentRequest
 import com.awkrid.todo.domain.comment.dto.CommentResponse
 import com.awkrid.todo.domain.comment.dto.UpdateCommentRequest
 import com.awkrid.todo.domain.comment.service.CommentService
+import com.awkrid.todo.infra.swagger.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/todos/{todoId}/comments")
@@ -36,11 +37,11 @@ class CommentController(
     fun addComment(
         @PathVariable("todoId") todoId: Long,
         @RequestBody addCommentRequest: AddCommentRequest,
-        authentication: Authentication
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(commentService.addComment(todoId, addCommentRequest, authentication))
+            .body(commentService.addComment(todoId, addCommentRequest, userPrincipal.id))
     }
 
     @PutMapping("/{commentId}")
@@ -48,20 +49,20 @@ class CommentController(
         @PathVariable("todoId") todoId: Long,
         @PathVariable("commentId") commentId: Long,
         @RequestBody updateCommentRequest: UpdateCommentRequest,
-        authentication: Authentication
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(commentService.updateComment(todoId, commentId, updateCommentRequest, authentication))
+            .body(commentService.updateComment(todoId, commentId, updateCommentRequest, userPrincipal.id))
     }
 
     @DeleteMapping("/{commentId}")
     fun deleteComment(
         @PathVariable("todoId") todoId: Long,
         @PathVariable("commentId") commentId: Long,
-        authentication: Authentication
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<Unit> {
-        commentService.deleteComment(todoId, commentId, authentication)
+        commentService.deleteComment(todoId, commentId, userPrincipal.id)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()

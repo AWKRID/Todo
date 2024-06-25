@@ -9,10 +9,8 @@ import com.awkrid.todo.domain.exception.ModelNotFoundException
 import com.awkrid.todo.domain.todo.repository.TodoRepository
 import com.awkrid.todo.domain.user.exception.InvalidCredentialException
 import com.awkrid.todo.domain.user.repository.UserRepository
-import com.awkrid.todo.infra.swagger.security.UserPrincipal
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
@@ -34,11 +32,10 @@ class CommentService(
     }
 
     @Transactional
-    fun addComment(todoId: Long, request: AddCommentRequest, authentication: Authentication): CommentResponse {
-        val userPrincipal = authentication.principal as UserPrincipal
+    fun addComment(todoId: Long, request: AddCommentRequest, userId: Long): CommentResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
         val user =
-            userRepository.findByIdOrNull(userPrincipal.id) ?: throw ModelNotFoundException("User", userPrincipal.id)
+            userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
         val comment = Comment(
             user = user,
             text = request.text,
@@ -54,12 +51,11 @@ class CommentService(
         todoId: Long,
         commentId: Long,
         request: UpdateCommentRequest,
-        authentication: Authentication
+        userId: Long,
     ): CommentResponse {
-        val userPrincipal = authentication.principal as UserPrincipal
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        if (comment.user.id != userPrincipal.id) {
+        if (comment.user.id != userId) {
             throw InvalidCredentialException()
         }
         comment.text = request.text
@@ -68,11 +64,10 @@ class CommentService(
     }
 
     @Transactional
-    fun deleteComment(todoId: Long, commentId: Long, authentication: Authentication) {
-        val userPrincipal = authentication.principal as UserPrincipal
+    fun deleteComment(todoId: Long, commentId: Long, userId: Long) {
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        if (comment.user.id != userPrincipal.id) {
+        if (comment.user.id != userId) {
             throw InvalidCredentialException()
         }
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)

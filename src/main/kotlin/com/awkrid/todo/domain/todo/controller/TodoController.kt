@@ -4,6 +4,7 @@ import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
 import com.awkrid.todo.domain.todo.dto.TodoResponse
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.todo.service.TodoService
+import com.awkrid.todo.infra.swagger.security.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -11,7 +12,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/todos")
@@ -41,30 +42,30 @@ class TodoController(
     @PostMapping
     fun createTodo(
         @Valid @RequestBody createTodoRequest: CreateTodoRequest,
-        authentication: Authentication
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(todoService.createTodo(createTodoRequest, authentication))
+            .body(todoService.createTodo(createTodoRequest, userPrincipal.id))
     }
 
     @PutMapping("/{todoId}")
     fun updateTodo(
         @PathVariable todoId: Long,
         @Valid @RequestBody updateTodoRequest: UpdateTodoRequest,
-        authentication: Authentication,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.updateTodo(todoId, updateTodoRequest, authentication))
+            .body(todoService.updateTodo(todoId, updateTodoRequest, userPrincipal.id))
     }
 
     @DeleteMapping("/{todoId}")
     fun deleteTodo(
         @PathVariable todoId: Long,
-        authentication: Authentication,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<Unit> {
-        todoService.deleteTodo(todoId, authentication)
+        todoService.deleteTodo(todoId, userPrincipal.id)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
