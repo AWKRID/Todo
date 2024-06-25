@@ -2,6 +2,7 @@ package com.awkrid.todo.domain.todo.controller
 
 import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
 import com.awkrid.todo.domain.todo.dto.TodoResponse
+import com.awkrid.todo.domain.todo.dto.TodoResponseWithComments
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.todo.service.TodoService
 import com.awkrid.todo.infra.swagger.security.UserPrincipal
@@ -22,7 +23,7 @@ class TodoController(
 ) {
 
     @GetMapping("/{todoId}")
-    fun getTodo(@PathVariable todoId: Long): ResponseEntity<TodoResponse> {
+    fun getTodo(@PathVariable todoId: Long): ResponseEntity<TodoResponseWithComments> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.getTodoById(todoId))

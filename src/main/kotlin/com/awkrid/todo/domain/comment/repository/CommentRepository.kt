@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface CommentRepository : JpaRepository<Comment, Long> {
     fun findByTodoIdAndId(todoId: Long, lectureId: Long): Comment?
+    fun findAllByTodoId(todoId: Long): List<Comment>
 }

@@ -22,7 +22,9 @@ class CommentService(
 
     fun getCommentList(todoId: Long): List<CommentResponse> {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        return todo.comments.map { CommentResponse.from(it) }
+        return commentRepository.findAllByTodoId(todo.id!!)
+            .map { CommentResponse.from(it) }
+
     }
 
     fun getCommentById(todoId: Long, commentId: Long): CommentResponse {
@@ -42,7 +44,6 @@ class CommentService(
             todo = todo,
         ).let { commentRepository.save(it) }
 
-        todo.addComment(comment)
         return CommentResponse.from(comment)
     }
 
@@ -67,11 +68,7 @@ class CommentService(
     fun deleteComment(todoId: Long, commentId: Long, userId: Long) {
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        if (comment.user.id != userId) {
-            throw InvalidCredentialException()
-        }
-        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        todo.removeComment(comment)
+        if (comment.user.id != userId) throw InvalidCredentialException()
         commentRepository.delete(comment)
     }
 }

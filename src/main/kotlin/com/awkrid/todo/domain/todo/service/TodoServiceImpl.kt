@@ -1,8 +1,10 @@
 package com.awkrid.todo.domain.todo.service
 
+import com.awkrid.todo.domain.comment.repository.CommentRepository
 import com.awkrid.todo.domain.exception.ModelNotFoundException
 import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
 import com.awkrid.todo.domain.todo.dto.TodoResponse
+import com.awkrid.todo.domain.todo.dto.TodoResponseWithComments
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.todo.model.Todo
 import com.awkrid.todo.domain.todo.repository.TodoRepository
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service
 class TodoServiceImpl(
     private val todoRepository: TodoRepository,
     private val userRepository: UserRepository,
+    private val commentRepository: CommentRepository,
 ) : TodoService {
     override fun getAllTodoList(name: String?, pageable: Pageable): Page<TodoResponse> {
         val pageTodo: Page<Todo> = if (name.isNullOrBlank()) todoRepository.findAll(pageable)
@@ -26,9 +29,10 @@ class TodoServiceImpl(
 
     }
 
-    override fun getTodoById(todoId: Long): TodoResponse {
+    override fun getTodoById(todoId: Long): TodoResponseWithComments {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        return TodoResponse.from(todo)
+        val comments = commentRepository.findAllByTodoId(todoId)
+        return TodoResponseWithComments.from(todo, comments)
     }
 
     @Transactional

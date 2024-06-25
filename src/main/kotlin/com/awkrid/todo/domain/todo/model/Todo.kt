@@ -1,6 +1,5 @@
 package com.awkrid.todo.domain.todo.model
 
-import com.awkrid.todo.domain.comment.model.Comment
 import com.awkrid.todo.domain.todo.dto.UpdateTodoRequest
 import com.awkrid.todo.domain.user.model.User
 import jakarta.persistence.*
@@ -26,21 +25,10 @@ class Todo(
     @JoinColumn(name = "user_id")
     val user: User,
 
-    @OneToMany(mappedBy = "todo")
-    val comments: MutableList<Comment> = mutableListOf(),
-
     ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
-
-    fun addComment(comment: Comment) {
-        comments.add(comment)
-    }
-
-    fun removeComment(comment: Comment) {
-        comments.remove(comment)
-    }
 
     fun updateTodo(request: UpdateTodoRequest) {
         if (request.isDone) isDone = true
