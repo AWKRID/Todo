@@ -1,5 +1,6 @@
 package com.awkrid.todo.domain.todo.service
 
+import com.awkrid.todo.domain.category.repository.CategoryRepository
 import com.awkrid.todo.domain.comment.repository.CommentRepository
 import com.awkrid.todo.domain.exception.ModelNotFoundException
 import com.awkrid.todo.domain.todo.dto.CreateTodoRequest
@@ -21,6 +22,7 @@ class TodoServiceImpl(
     private val todoRepository: TodoRepository,
     private val userRepository: UserRepository,
     private val commentRepository: CommentRepository,
+    private val categoryRepository: CategoryRepository,
 ) : TodoService {
     override fun getAllTodoList(name: String?, pageable: Pageable): Page<TodoResponse> {
         val pageTodo: Page<Todo> = if (name.isNullOrBlank()) todoRepository.findAll(pageable)
@@ -39,10 +41,16 @@ class TodoServiceImpl(
     override fun createTodo(request: CreateTodoRequest, userId: Long): TodoResponse {
         val user =
             userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        val category = categoryRepository.findByName(request.category) ?: throw ModelNotFoundException(
+            "Category",
+            request.category
+        )
         val todo = Todo(
             title = request.title,
             description = request.description,
-            user = user
+            user = user,
+            tags = toHashTags(request.tags),
+            category = category
         )
         return todoRepository.save(todo).let {
             TodoResponse.from(it)
@@ -52,11 +60,17 @@ class TodoServiceImpl(
     @Transactional
     override fun updateTodo(todoId: Long, request: UpdateTodoRequest, userId: Long): TodoResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+        val category = categoryRepository.findByName(request.category) ?: throw ModelNotFoundException(
+            "Category",
+            request.category
+        )
         if (todo.user.id != userId) throw InvalidCredentialException()
         todo.apply {
             this.title = request.title
             this.description = request.description
             this.isDone = request.isDone
+            this.tags = "#" + request.tags.joinToString("#") + "#"
+            this.category = category
         }
         return todoRepository.save(todo)
             .let { TodoResponse.from(it) }
@@ -71,4 +85,5 @@ class TodoServiceImpl(
         todoRepository.delete(todo)
     }
 
+    private fun toHashTags(tags: List<String>): String = "#" + tags.joinToString("#") + "#"
 }

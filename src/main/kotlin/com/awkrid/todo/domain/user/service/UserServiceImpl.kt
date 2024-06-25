@@ -33,7 +33,7 @@ class UserServiceImpl(
     }
 
     override fun login(request: LoginRequest): LoginResponse {
-        val user = userRepository.findByName(request.name) ?: throw ModelNotFoundException("User", null)
+        val user = userRepository.findByName(request.name) ?: throw ModelNotFoundException("User", request.name)
         if (user.role.name != request.role || !passwordEncoder.matches(request.password, user.password)) {
             throw InvalidCredentialException()
         }

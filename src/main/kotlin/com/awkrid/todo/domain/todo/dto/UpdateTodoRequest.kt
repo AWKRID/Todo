@@ -8,4 +8,6 @@ data class UpdateTodoRequest(
     @field:Size(max = 1000, min = 1, message = "내용은 1~1000자 이내로 작성해주세요.")
     val description: String,
     val isDone: Boolean,
+    val category: String,
+    val tags: List<String>,
 )

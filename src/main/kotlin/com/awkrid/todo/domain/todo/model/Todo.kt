@@ -1,5 +1,6 @@
 package com.awkrid.todo.domain.todo.model
 
+import com.awkrid.todo.domain.category.model.Category
 import com.awkrid.todo.domain.user.model.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -19,6 +20,13 @@ class Todo(
 
     @Column(name = "is_done")
     var isDone: Boolean = false,
+
+    @Column(name = "tags")
+    var tags: String = "",
+
+    @ManyToOne()
+    @JoinColumn(name = "category")
+    var category: Category,
 
     @ManyToOne()
     @JoinColumn(name = "user_id")

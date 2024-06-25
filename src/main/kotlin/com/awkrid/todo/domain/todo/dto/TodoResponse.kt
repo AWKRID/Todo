@@ -11,8 +11,10 @@ data class TodoResponse(
     val date: LocalDateTime,
     val isDone: Boolean,
     val user: UserResponse,
+    val tags: List<String>,
+    val category: String
 
-    ) {
+) {
     companion object {
         fun from(todo: Todo): TodoResponse {
             return TodoResponse(
@@ -21,7 +23,9 @@ data class TodoResponse(
                 description = todo.description,
                 date = todo.date,
                 isDone = todo.isDone,
-                user = UserResponse.from(todo.user)
+                user = UserResponse.from(todo.user),
+                tags = todo.tags.split("#").filter(String::isNotEmpty),
+                category = todo.category.name
             )
         }
     }
