@@ -166,6 +166,7 @@ class TodoServiceTest {
             id = 1L,
             title = "제목",
             description = "내용",
+            date = LocalDateTime.of(2024, 6, 29, 15, 54),
             isDone = true,
             category = "카테고리",
             tags = "#태그#",
@@ -201,6 +202,7 @@ class TodoServiceTest {
             id = 1L,
             title = "제목",
             description = "내용",
+            date = LocalDateTime.of(2024, 6, 29, 15, 54),
             isDone = true,
             category = "카테고리",
             tags = "#태그#",
@@ -237,6 +239,7 @@ class TodoServiceTest {
             title = "제목",
             description = "내용",
             isDone = true,
+            date = LocalDateTime.of(2024, 6, 29, 15, 54),
             category = "카테고리",
             tags = "#태그#",
             user = user
@@ -246,6 +249,7 @@ class TodoServiceTest {
             title = "제목 after",
             description = "내용 after",
             isDone = true,
+            date = LocalDateTime.of(2024, 6, 29, 15, 54),
             category = "카테고리 after",
             tags = "#태그after#",
             user = user
@@ -296,6 +300,7 @@ class TodoServiceTest {
             title = "제목",
             description = "내용",
             isDone = true,
+            date = LocalDateTime.of(2024, 6, 29, 15, 54),
             category = "카테고리",
             tags = "#태그#",
             user = user
@@ -323,6 +328,7 @@ class TodoServiceTest {
             title = "제목",
             description = "내용",
             isDone = true,
+            date = LocalDateTime.of(2024, 6, 29, 15, 54),
             category = "카테고리",
             tags = "#태그#",
             user = user
