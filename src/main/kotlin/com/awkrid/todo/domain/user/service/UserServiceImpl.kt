@@ -10,7 +10,7 @@ import com.awkrid.todo.domain.user.exception.InvalidCredentialException
 import com.awkrid.todo.domain.user.model.User
 import com.awkrid.todo.domain.user.model.UserRole
 import com.awkrid.todo.domain.user.repository.UserRepository
-import com.awkrid.todo.infra.swagger.security.jwt.jwtHelper
+import com.awkrid.todo.infra.security.jwt.JwtHelper
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val jwtHelper: jwtHelper
+    private val jwtHelper: JwtHelper
 ) : UserService {
     override fun signUp(request: SignUpRequest): UserResponse {
         if (userRepository.existsByName(request.name)) throw IllegalStateException("Username already taken")

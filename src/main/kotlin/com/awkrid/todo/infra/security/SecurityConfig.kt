@@ -1,6 +1,6 @@
-package com.awkrid.todo.infra.swagger.security
+package com.awkrid.todo.infra.security
 
-import com.awkrid.todo.infra.swagger.security.jwt.JwtAuthenticationFilter
+import com.awkrid.todo.infra.security.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

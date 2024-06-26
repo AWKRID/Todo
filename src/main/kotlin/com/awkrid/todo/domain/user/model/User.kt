@@ -6,6 +6,10 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "app_user")
 class User(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+
     @Column(name = "name")
     var name: String,
 
@@ -23,8 +27,8 @@ class User(
     @Column(name = "role", nullable = false)
     val role: UserRole
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
 
+    fun isSocialLoginUser(): Boolean {
+        return provider != null
+    }
 }

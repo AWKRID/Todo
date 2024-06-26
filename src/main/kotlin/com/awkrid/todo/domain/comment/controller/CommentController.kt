@@ -4,7 +4,7 @@ import com.awkrid.todo.domain.comment.dto.AddCommentRequest
 import com.awkrid.todo.domain.comment.dto.CommentResponse
 import com.awkrid.todo.domain.comment.dto.UpdateCommentRequest
 import com.awkrid.todo.domain.comment.service.CommentService
-import com.awkrid.todo.infra.swagger.security.UserPrincipal
+import com.awkrid.todo.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal

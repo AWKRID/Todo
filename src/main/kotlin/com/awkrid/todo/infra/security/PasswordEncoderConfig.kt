@@ -1,4 +1,4 @@
-package com.awkrid.todo.infra.swagger.security
+package com.awkrid.todo.infra.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

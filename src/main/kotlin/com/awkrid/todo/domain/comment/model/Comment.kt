@@ -8,6 +8,10 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "comment")
 class Comment(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+
     @Column(name = "text")
     var text: String,
 
@@ -19,7 +23,4 @@ class Comment(
     @JoinColumn(name = "user_id")
     val user: User,
 ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
 }

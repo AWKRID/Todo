@@ -1,6 +1,6 @@
-package com.awkrid.todo.infra.swagger.security.jwt
+package com.awkrid.todo.infra.security.jwt
 
-import com.awkrid.todo.infra.swagger.security.UserPrincipal
+import com.awkrid.todo.infra.security.UserPrincipal
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-    private val jwtHelper: jwtHelper
+    private val jwtHelper: JwtHelper
 ) : OncePerRequestFilter() {
 
     companion object {
@@ -32,12 +32,12 @@ class JwtAuthenticationFilter(
                         id = it.payload.subject.toLong(),
                         name = it.payload.get("name", String::class.java),
                         roles = setOf(it.payload.get("role", String::class.java))
-                    ).let{ principal ->
+                    ).let { principal ->
                         JwtAuthenticationToken(
                             principal = principal,
                             details = WebAuthenticationDetailsSource().buildDetails(request)
                         )
-                    }.let{ authentication ->
+                    }.let { authentication ->
                         SecurityContextHolder.getContext().authentication = authentication
                     }
                 }

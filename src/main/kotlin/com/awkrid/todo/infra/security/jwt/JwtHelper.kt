@@ -1,4 +1,4 @@
-package com.awkrid.todo.infra.swagger.security.jwt
+package com.awkrid.todo.infra.security.jwt
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
@@ -12,7 +12,7 @@ import java.time.Instant
 import java.util.*
 
 @Component
-class jwtHelper(
+class JwtHelper(
     @Value("\${auth.jwt.issuer}") private val issuer: String,
     @Value("\${auth.jwt.secret}") private val secret: String,
     @Value("\${auth.jwt.accessTokenExpirationHour}") private val accessTokenExpirationHour: Int,

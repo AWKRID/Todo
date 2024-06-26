@@ -1,4 +1,4 @@
-package com.awkrid.todo.infra.swagger.security
+package com.awkrid.todo.infra.security
 
 import com.awkrid.todo.domain.exception.dto.ErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -10,12 +10,12 @@ import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
 
 @Component
-class CustomAuthenticationEntryPoint: AuthenticationEntryPoint {
+class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
     override fun commence(
         request: HttpServletRequest,
         response: HttpServletResponse,
         authException: AuthenticationException
-    ){
+    ) {
         response.status = HttpServletResponse.SC_UNAUTHORIZED
         response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.characterEncoding = "UTF-8"

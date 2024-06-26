@@ -2,7 +2,7 @@ package com.awkrid.todo.domain.todo.controller
 
 import com.awkrid.todo.domain.todo.dto.*
 import com.awkrid.todo.domain.todo.service.TodoService
-import com.awkrid.todo.infra.swagger.security.UserPrincipal
+import com.awkrid.todo.infra.security.UserPrincipal
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

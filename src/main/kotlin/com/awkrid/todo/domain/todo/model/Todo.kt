@@ -8,6 +8,10 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "todo")
 class Todo(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+
     @Column(name = "title")
     var title: String,
 
@@ -31,7 +35,4 @@ class Todo(
     val user: User,
 
     ) {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
 }
