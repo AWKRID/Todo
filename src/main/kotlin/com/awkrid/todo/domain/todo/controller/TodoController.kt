@@ -30,7 +30,6 @@ class TodoController(
         @PageableDefault(size = 10, sort = ["date"]) pageable: Pageable,
         filter: TodoFilter
     ): ResponseEntity<Page<TodoResponse>> {
-        pageable.sort
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.getAllTodoList(pageable, filter))
