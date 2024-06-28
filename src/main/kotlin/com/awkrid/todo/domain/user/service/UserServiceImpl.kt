@@ -11,14 +11,18 @@ import com.awkrid.todo.domain.user.model.User
 import com.awkrid.todo.domain.user.model.UserRole
 import com.awkrid.todo.domain.user.repository.UserRepository
 import com.awkrid.todo.infra.security.jwt.JwtHelper
+import jakarta.transaction.Transactional
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 
 @Service
 class UserServiceImpl(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val jwtHelper: JwtHelper
+    private val jwtHelper: JwtHelper,
+    private val s3Service: S3Service
 ) : UserService {
     override fun signUp(request: SignUpRequest): UserResponse {
         if (userRepository.existsByName(request.name)) throw IllegalStateException("Username already taken")
@@ -56,6 +60,16 @@ class UserServiceImpl(
                 providerId = userInfo.id
             )
             userRepository.save(user)
+        }
+        return UserResponse.from(user)
+    }
+
+    @Transactional
+    override fun uploadProfileImage(file: MultipartFile, userId: Long): UserResponse {
+        val user = userRepository.findByIdOrNull(userId) ?: throw ModelNotFoundException("User", userId)
+        val imageUrl = s3Service.uploadImage(file)
+        user.apply {
+            this.profileImageUrl = imageUrl
         }
         return UserResponse.from(user)
     }

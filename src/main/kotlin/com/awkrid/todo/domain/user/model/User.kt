@@ -16,6 +16,9 @@ class User(
     @Column(name = "password", nullable = true)
     var password: String? = null,
 
+    @Column(name = "profile_image_url")
+    var profileImageUrl: String? = null,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = true)
     var provider: OAuth2Provider? = null,
