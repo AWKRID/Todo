@@ -20,11 +20,12 @@ class UserServiceTest {
     private val userRepository = mockk<UserRepository>()
     private val passwordEncoder = mockk<PasswordEncoder>()
     private val jwtHelper = mockk<JwtHelper>()
-
+    private val s3Service = mockk<S3Service>()
     private val userService = UserServiceImpl(
         userRepository = userRepository,
         passwordEncoder = passwordEncoder,
-        jwtHelper = jwtHelper
+        jwtHelper = jwtHelper,
+        s3Service = s3Service,
     )
 
     @Test

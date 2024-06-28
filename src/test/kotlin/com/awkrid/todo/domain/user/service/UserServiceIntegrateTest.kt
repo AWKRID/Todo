@@ -7,6 +7,7 @@ import com.awkrid.todo.domain.user.repository.UserRepository
 import com.awkrid.todo.infra.security.jwt.JwtHelper
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
@@ -22,10 +23,12 @@ class UserServiceIntegrateTest @Autowired constructor(
     private val passwordEncoder: PasswordEncoder,
     private val jwtHelper: JwtHelper,
 ) {
+    private val s3Service = mockk<S3Service>()
     private val userService = UserServiceImpl(
         userRepository = userRepository,
         jwtHelper = jwtHelper,
         passwordEncoder = passwordEncoder,
+        s3Service = s3Service,
     )
 
     @Test
