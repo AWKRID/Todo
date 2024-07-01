@@ -1,6 +1,9 @@
 # Todo 앱 서버
 ---
- <img src="https://img.shields.io/badge/kotlin-#7F52FF?style=flat&logo=kotlin&logoColor=white"/>  <img src="https://img.shields.io/badge/spring-###6DB33F?style=flat&logo=spring&logoColor=white"/>
+<img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white">  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white"> <img src="https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white">
+
+
+
  
 ## 🔍프로젝트 소개 
 ---
